@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MVCSimpleObj.Models.IFighter>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Fighters</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FighterType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AttackAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefenseAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Health)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquippedWeapon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FighterType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AttackAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefenseAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Health)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EquippedWeapon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { name = item.Name }) |
+                @if (item.CanEdit)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { name = item.Name })
+                }
+                else
+                {
+                    @Html.ActionLink("Attack", "Attack", new { name=item.Name})
+                }
+
+                
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
