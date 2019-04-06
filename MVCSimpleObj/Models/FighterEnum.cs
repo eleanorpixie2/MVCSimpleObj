@@ -7,6 +7,7 @@ namespace MVCSimpleObj.Models
 {
     public class FighterEnum
     {
+        //fighter types
         public enum FighterTypes
         {
             Swordsman,

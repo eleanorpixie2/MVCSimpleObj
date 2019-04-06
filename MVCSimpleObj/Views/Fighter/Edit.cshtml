@@ -13,22 +13,15 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            <div class = "editor-field" >
-            @Html.DropDownList("FighterType", new List<SelectListItem>
-            {
-                new SelectListItem
-                {
-                    Text = "Archer", Value = "Archer",Selected="selected"
-                },
-                new SelectListItem
-                {
-                    Text = "Female", Value = "Female"
-                }
-            }, "Select Fighter Type")
+            <div class="editor-field">
+                <!-- Drop down list for fighter choices -->
+                @Html.LabelFor(m => m.FighterType)
+                @Html.DropDownListFor(m => m.FighterType, new SelectList(ViewBag.FighterType, Model.FighterType))
+                @Html.ValidationMessageFor(m => m.FighterType)
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save"/>
             </div>
         </form>
     </div>

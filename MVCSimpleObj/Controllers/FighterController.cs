@@ -11,42 +11,23 @@ namespace MVCSimpleObj.Controllers
 {
     public class FighterController : Controller
     {
-        List<IFighter> fighters;
-        IFighter player;
-        FighterEnum.FighterTypes currentPlayerType;
-        public FighterController()
-        {
-            fighters = new List<IFighter>()
-            {
-                new Swordsman(),
-                new Archer(),
-                new GunSlinger(),
-                new Mage()
-            };
 
-            player = new Swordsman(true,"player",50);
-            currentPlayerType = player.FighterType;
-            fighters.Add(player);
-            
-        }
         // GET: Fighter
         public ActionResult Index()
         { 
-            return View(fighters);
+            return View(Fighters.fighters);
         }
 
         // GET: Fighter/Details/5
         public ActionResult Details(string name)
         {
-            return View(fighters.Where(n => n.Name == name).FirstOrDefault());
+            return View(Fighters.fighters.Where(n => n.Name == name).FirstOrDefault());
         }
 
+        //attack action
         public ActionResult Attack(string name)
         {
-            //get the enemy fighter object
-            IFighter enemy= fighters.Where(n => n.Name == name).FirstOrDefault();
-            //decrease the health of the enemy
-            enemy.DecreaseHealth(player.AttackAmount-enemy.DefenseAmount);
+            Fighters.Attack(Fighters.fighters.Where(n => n.Name == name).FirstOrDefault());          
 
             return RedirectToAction(nameof(Index));
         }
@@ -54,10 +35,11 @@ namespace MVCSimpleObj.Controllers
         // GET: Fighter/Edit/5
         public ActionResult Edit(string name)
         {
-            IFighter fighter = fighters.Where(n => n.Name == name).FirstOrDefault();
+            //populate the visual list
             PopulateFighterTypeList();
-            if (fighter.CanEdit)
-                return View(fighter);
+            //if the fighter can be edited then call the edit view other wise go back to index
+            if (Fighters.fighters.Where(n => n.Name == name).FirstOrDefault().CanEdit)
+                return View(Fighters.fighters.Where(n => n.Name == name).FirstOrDefault());
             else
                 return RedirectToAction(nameof(Index));
         }
@@ -67,25 +49,31 @@ namespace MVCSimpleObj.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
+            int index = Fighters.fighters.FindIndex(f => f.Name == "player");
+            string selectedValue = Request.Form["FighterType"].ToString();
+            //Fighters.fighters[index].FighterType = FighterEnum.FighterTypes.Archer;
             try
             {
-                // TODO: Add update logic here
-                if(player.FighterType!=currentPlayerType)
+                //change the type of fighter that the player is, but keep the health the same
+                if(selectedValue != Fighters.currentPlayerType.ToString())
                 {
-                    currentPlayerType = player.FighterType;
-                    switch(player.FighterType)
+                    switch(selectedValue)
                     {
-                        case FighterEnum.FighterTypes.Archer:
-                            player = new Archer(true, "player",player.Health);
+                        case "Archer":
+                            Fighters.fighters[index] = new Archer(true, "player", Fighters.fighters[index].Health);
+                            Fighters.currentPlayerType = FighterEnum.FighterTypes.Archer;
                             break;
-                        case FighterEnum.FighterTypes.Gunslinger:
-                            player = new GunSlinger(true, "player", player.Health);
+                        case "Gunslinger":
+                            Fighters.fighters[index] = new GunSlinger(true, "player", Fighters.fighters[index].Health);
+                            Fighters.currentPlayerType = FighterEnum.FighterTypes.Gunslinger;
                             break;
-                        case FighterEnum.FighterTypes.Mage:
-                            player = new Mage(true, "player", player.Health);
+                        case "Mage":
+                            Fighters.fighters[index] = new Mage(true, "player", Fighters.fighters[index].Health);
+                            Fighters.currentPlayerType = FighterEnum.FighterTypes.Mage;
                             break;
-                        case FighterEnum.FighterTypes.Swordsman:
-                            player = new Swordsman(true, "player", player.Health);
+                        case "Swordsman":
+                            Fighters.fighters[index] = new Swordsman(true, "player", Fighters.fighters[index].Health);
+                            Fighters.currentPlayerType = FighterEnum.FighterTypes.Swordsman;
                             break;
                     }
                 }
@@ -97,7 +85,7 @@ namespace MVCSimpleObj.Controllers
             }
         }
 
-
+        //populate the list that will be shown when edit is called
         void PopulateFighterTypeList()
         {
             List<FighterEnum.FighterTypes> types = new List<FighterEnum.FighterTypes>()
@@ -107,7 +95,7 @@ namespace MVCSimpleObj.Controllers
                 FighterEnum.FighterTypes.Mage,
                 FighterEnum.FighterTypes.Swordsman
             };
-            ViewBag.FighterType = new SelectList(types, player.FighterType);
+            ViewBag.FighterType = types;
         }
     }
 }

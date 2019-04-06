@@ -7,22 +7,31 @@ namespace MVCSimpleObj.Models
 {
     public class GunSlinger : IFighter
     {
+        //fighter type
         public FighterEnum.FighterTypes FighterType { get; set; }
 
+        //the amount that the fighter can attack
         public int AttackAmount { get; set; }
 
+        //the amount that the fighter can defend
         public int DefenseAmount { get; set; }
 
+        //the weapon(s) that the fighter has
         public string EquippedWeapon { get; set; }
 
+        //the health that the player has
         public int Health { get; set; }
 
+        //whether the player type can be edited
         public bool CanEdit { get; set; }
 
+        //id/name of the fighter
         public string Name { get; set; }
 
+        //the default constructor
         public GunSlinger():this(false,"npcSlinger",50){}
 
+        //constructor
         public GunSlinger(bool _canEdit,string _name, int _health)
         {
             CanEdit = _canEdit;
@@ -34,6 +43,7 @@ namespace MVCSimpleObj.Models
             EquippedWeapon = "Semi-Automatic Rifle and a 9mm pistol";
         }
 
+        //decrease the health amount
         public void DecreaseHealth(int amount)
         {
             if (Health > 0)
