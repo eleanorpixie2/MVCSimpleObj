@@ -43,7 +43,7 @@ namespace MVCSimpleObj.Models
                 fighters.Where(n => n == enemy).FirstOrDefault().DecreaseHealth(player.AttackAmount - fighters.Where(n => n == enemy).FirstOrDefault().DefenseAmount);
 
                 //attack the player back
-                int enemyRetaliation = rnd.Next(0, fighters.Where(n => n == enemy).FirstOrDefault().AttackAmount);
+                int enemyRetaliation = rnd.Next(1, fighters.Where(n => n == enemy).FirstOrDefault().AttackAmount);
                 int hitAmount = enemyRetaliation - player.DefenseAmount;
                 if (hitAmount > 0)
                     player.DecreaseHealth(hitAmount);
